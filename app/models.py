@@ -1,5 +1,5 @@
 from datetime import datetime
-from . import db,login_manager
+from . import db
 
 class Role(db.Model):
     __tablename__ = 'roles'
