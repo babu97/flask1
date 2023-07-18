@@ -10,5 +10,10 @@
 <div class="col-md-6">
     {{ wtf.quick_form(form) }}
 
+    <p class = "fs-4"> {% if current_user.is_authenticated != True %}
+        <p>New User?<br/>
+             <a href="{{ url_for('auth.register') }}">click here to  register</a></p>
+        {% endif %}</p>
+   
 </div>
 {% endblock %}
