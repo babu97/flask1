@@ -26,3 +26,30 @@ class LoginForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired()])  # Corrected this line
     remember_me = BooleanField('keep me logged in')
     submit = SubmitField('Log In')
+class changePasswordForm(FlaskForm):
+   old_password = PasswordField('Old password', validators=[DataRequired()])
+   password = PasswordField('New password', validators=[DataRequired(),EqualTo('password2', message='Passwords must match.')])
+   password2 = PasswordField('Confirmed password', validators=[DataRequired(),])
+
+   submit  = SubmitField('update password')
+
+class PasswordResetRequestForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Length(1, 64),
+                                             Email()])
+    submit = SubmitField('Reset Password')
+
+class PasswordResetForm(FlaskForm):
+   password = PasswordField('New password', validators=[DataRequired(),EqualTo('password2', message='Passwords must match.')])
+   password2 = PasswordField('Confirmed password', validators=[DataRequired(),])
+   submit  = SubmitField('update password')
+
+
+class ChangeEmailForm(FlaskForm):
+  email = StringField('New Email', validators=[DataRequired(), Length(1, 64),
+                                                 Email()])
+  password = PasswordField('Password', validators=[DataRequired()])
+  submit = SubmitField('Update Email Address')
+
+  def validate_email(self, field):
+     if User.query.filter_by(email=field.data.lower()).first():
+        raise ValidationError('Email already registered.')

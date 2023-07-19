@@ -21,7 +21,16 @@
     <ul class="nav navbar-nav navbar-right">
 
         {% if current_user.is_authenticated %}
-        <li><a href="{{url_for('auth.logout')}}">Log Out</a></li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+
+            <ul class="dropdown-menu">
+                <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
+                <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+            </ul>
+
+       </li>
         {% else %}
         <li><a href="{{url_for('auth.login') }}">Log In</a></li>
         {% endif %}
@@ -40,8 +49,21 @@
 {% endblock%}
 {% block content %}
 <div class="container">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if 'success' in message %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+    {% elif 'alert' in message %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% endblock %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
         <button type="button" class="close" dat-dismiss = 'alert'>&times;</button>
         {{ message }}
     </div>
