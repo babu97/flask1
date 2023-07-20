@@ -9,7 +9,7 @@ from ..models import User
 
 @main.route('/user/<name>')
 def user(name):
-    return render_template('index.html', name=name)
+    return render_template('user.html', name=name)
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -31,7 +31,3 @@ def index():
         return redirect(url_for('.index'))
     return render_template('user.html', form=form, name=session.get('name'),
                            known=session.get('known', False))
-@main.route('/user/<username>')
-def user(username):
-    user = User.query.filter_by(username = username).first_or_404()
-    return render_template('user.html', user= user)

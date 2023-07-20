@@ -5,33 +5,11 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>{{ user.username }}</h1>
-
-    {% if user.name or user.location %}
-<p>
-    {% if user.name %}
-    {{ user.name }}
-    {% endif %}
-    {% if user.location %}
-    from <a href="http://maps.google.com/?q={{user.location}}"
-    {{user.location}}
-</a>
-{% endif %}
-
-</p>
-{% if current_user.is_administrator() %}
-<p>
-    <a href="mailto:{{user.mail}}">{{user.email}}</a>
-</p>
-{% endif %}
-
-{% if user.about_me%}
-<p>{{user.about_me }}</p> 
-{% endif %}
-<p>
-    member since {{moment(user.member_since).format('L')}}
-    last seen {{moment(user.last_seen). fromNow() }}.
-
-</p> 
+    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}
+        <p>New User?<br/>
+             <a href="{{ url_for('auth.register') }}">click here to  register</a></p>
+        {% endif %}</h1>
+  
 </div>
+{{ wtf.quick_form(form) }}
 {% endblock %}
