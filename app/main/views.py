@@ -5,7 +5,7 @@ from .forms import NameForm
 from flask_sqlalchemy import get_debug_queries
 from . import main
 from .. import db
-from ..models import User
+from ..models import User,Permission
 from ..decorators  import admin_required, permission_required
 from flask_login import login_required
 
@@ -39,5 +39,11 @@ def index():
 @admin_required
 def for_admins_only():
     return "for administrators!"
+
+@main.route('/moderate')
+@login_required
+@permission_required(Permission.MODERATE)
+def for_moderators_only():
+    return "For comment Moderators!"
 
 
