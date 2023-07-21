@@ -6,6 +6,9 @@ from flask_sqlalchemy import get_debug_queries
 from . import main
 from .. import db
 from ..models import User
+from ..decorators  import admin_required, permission_required
+from flask_login import login_required
+
 
 @main.route('/user/<name>')
 def user(name):
@@ -31,3 +34,10 @@ def index():
         return redirect(url_for('.index'))
     return render_template('user.html', form=form, name=session.get('name'),
                            known=session.get('known', False))
+@main.route('/admin')
+@login_required
+@admin_required
+def for_admins_only():
+    return "for administrators!"
+
+
