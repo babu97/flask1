@@ -46,7 +46,3 @@ class  PostForm(FlaskForm):
     body = TextAreaField("What is in your mind?", validators=[DataRequired()])
     submit = SubmitField('submit')
     
-
-
-
-    
