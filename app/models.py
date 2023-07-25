@@ -4,7 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
+
 from . import db, login_manager
+from markdown import markdown
+import bleach
 
 from datetime import datetime
 
@@ -74,6 +77,16 @@ class Post(UserMixin, db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    body_html = db.Column(db.Text)
+
+    @staticmethod
+    def on_changed_body(target,value,oldvalue,initiator):
+        allowed_tags = ['a', 'abbr', 'accronym', 'b', 'blockquote' 'code','em',
+                        'i', 'li','ol', 'pre', 'strong', 'ul', 'h1','h2','h3', 'p']
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'), 
+                                                      tags = allowed_tags, strip=True ))
+db.event.listen(Post.body, 'set', Post.on_changed_body)
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -219,3 +232,17 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+registrations = db.Table('registrations',
+                         db.Column('student_id', db.Integer, db.ForeignKey('student.id')), 
+                         db.Column('class_id', db.Integer, db.ForeignKey('class.id')))
+
+class Student(db.Model):
+    id = db.Column(db.integer, primary_key = True)
+    name = db.Column(db.String)
+    classes = db.relationship('class', secondary=registrations, backref = db.backref('students'), lazy = 'dynamic')
+
+class Class(db.Model):
+    id = db.Column(db.Integer, primary_key =True)
+    name = db.Column(db.String)
+     
