@@ -15,7 +15,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SSL_REDIRECT = False
     FLASKY_FOLLOWERS_PER_PAGE= 50
-    FLASKY_POSTS_PER_PGE=50
+    FLASKY_POSTS_PER_PAGE=50
 
     @staticmethod
     def init_app(app):
