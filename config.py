@@ -11,6 +11,7 @@ class Config:
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     FLASKY_MAIL_SENDER = 'flasky Admin<admin@Rosetta.technology'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    FLASKY_FOLLOWERS_PER_PAGE=54
     FLASKY_POSTS_PER_PAGE = 5
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SSL_REDIRECT = False
