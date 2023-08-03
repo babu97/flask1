@@ -15,6 +15,7 @@ class Config:
     FLASKY_POSTS_PER_PAGE = 5
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SSL_REDIRECT = False
+    FLASKY_COMMENTS_PER_PAGE=5
 
     @staticmethod
     def init_app(app):
@@ -35,6 +36,13 @@ class ProductionConfig(Config):
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABSE_URI') or 'sqlite:///' +os.path.join(basedir, 'data.sqlite')
 
+    @classmethod
+    def init_app(cls, app):
+        Config.init_app(app)
+
+
+
+      
 
 config = {
 
@@ -44,6 +52,24 @@ config = {
     'default' : DevelopmentConfig
 
 }
+
+class DockerConfig(ProductionConfig):
+    
+
+  @classmethod
+  def init_app(cls, app):
+        ProductionConfig.init_app(app)
+
+        # log to stderr
+        import logging
+        from logging import StreamHandler
+        file_handler = StreamHandler()
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+        
+
+
+
 
 
 
